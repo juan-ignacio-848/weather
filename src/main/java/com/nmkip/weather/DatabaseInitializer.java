@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "app.db-init", havingValue = "true")
 public class DatabaseInitializer implements CommandLineRunner {
 
-    ForecastRepository forecastRepository;
-    SummaryRepository summaryRepository;
-    WeatherForecastReporter reporter;
+    private final ForecastRepository forecastRepository;
+    private final SummaryRepository summaryRepository;
+    private final WeatherForecastReporter reporter;
 
     public DatabaseInitializer(SummaryRepository summaryRepository, ForecastRepository forecastRepository, WeatherForecastReporter reporter) {
         this.summaryRepository = summaryRepository;
@@ -25,12 +25,10 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-        System.out.println("Iniciando carga en base");
+    public void run(String... args) {
         final WeatherForecastReport report = reporter.reportForFollowing(360);
         forecastRepository.saveAll(report.forecasts());
         summaryRepository.save(summaryFrom(report));
-        System.out.println("Base inicializada");
     }
 
     private Summary summaryFrom(WeatherForecastReport weatherForecastReport) {
