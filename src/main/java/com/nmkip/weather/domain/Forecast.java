@@ -19,7 +19,7 @@ public class Forecast {
 
     }
 
-    Forecast(int day, Weather weather) {
+    public Forecast(int day, Weather weather) {
         this.day = day;
         this.weather = weather;
     }
