@@ -1,7 +1,7 @@
 package com.nmkip.weather.service;
 
 import com.nmkip.weather.domain.Forecast;
-import com.nmkip.weather.exception.ForecastNotFoundException;
+import com.nmkip.weather.exception.NotFoundException;
 import com.nmkip.weather.repository.ForecastRepository;
 import name.falgout.jeffrey.testing.junit.mockito.MockitoExtension;
 import org.junit.jupiter.api.Assertions;
@@ -49,6 +49,6 @@ class ForecastServiceTest {
     void throw_an_exception_when_day_is_not_found() {
         given(forecastRepository.findById(32)).willReturn(Optional.empty());
 
-        Assertions.assertThrows(ForecastNotFoundException.class, () -> service.forecastFor(32));
+        Assertions.assertThrows(NotFoundException.class, () -> service.forecastFor(32));
     }
 }

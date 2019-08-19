@@ -2,7 +2,7 @@ package com.nmkip.weather.controller;
 
 import com.nmkip.weather.adapter.ForecastAdapter;
 import com.nmkip.weather.domain.Forecast;
-import com.nmkip.weather.exception.ForecastNotFoundException;
+import com.nmkip.weather.exception.NotFoundException;
 import com.nmkip.weather.exception.WeatherControllerAdvice;
 import com.nmkip.weather.service.ForecastService;
 import name.falgout.jeffrey.testing.junit.mockito.MockitoExtension;
@@ -22,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class ForecastControllerTest {
+
+    private static final String FORECAST_NOT_FOUND = "Forecast not found";
 
     @Mock
     private ForecastService forecastService;
@@ -61,10 +63,10 @@ class ForecastControllerTest {
 
     @Test
     void when_searching_for_a_specific_forecast_and_it_does_not_exist_then_status_is_not_found() throws Exception {
-        given(forecastService.forecastFor(23341)).willThrow(ForecastNotFoundException.class);
+        given(forecastService.forecastFor(23341)).willThrow(new NotFoundException(FORECAST_NOT_FOUND));
         mockMvc.perform(get("/weather?day=23341"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message", is("Forecast not found")));
+                .andExpect(jsonPath("$.message", is(FORECAST_NOT_FOUND)));
     }
 
     @Test

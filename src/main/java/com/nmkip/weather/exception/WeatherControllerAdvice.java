@@ -18,8 +18,8 @@ public class WeatherControllerAdvice {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handle(ForecastNotFoundException ex) {
-        return new ErrorResponse("Forecast not found");
+    public ErrorResponse handle(NotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ExceptionHandler

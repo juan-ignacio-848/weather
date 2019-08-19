@@ -2,6 +2,7 @@ package com.nmkip.weather.controller;
 
 import com.nmkip.weather.adapter.SummaryAdapter;
 import com.nmkip.weather.domain.Summary;
+import com.nmkip.weather.exception.NotFoundException;
 import com.nmkip.weather.exception.WeatherControllerAdvice;
 import com.nmkip.weather.service.SummaryService;
 import name.falgout.jeffrey.testing.junit.mockito.MockitoExtension;
@@ -20,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class SummaryControllerTest {
+
+    private static final String SUMMARY_NOT_FOUND = "Summary not found";
 
     @Mock
     private SummaryService summaryService;
@@ -52,10 +55,19 @@ class SummaryControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("Param 'years' is required")));
     }
+
     @Test
     void when_searching_for_a_summary_and_years_param_is_less_than_1_then_status_is_bad_request() throws Exception {
         mockMvc.perform(get("/weather/summary?years=0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("Param 'years' must be greater or equal than 1")));
+    }
+
+    @Test
+    void when_searching_for_a_summary_and_it_does_not_exist_then_status_is_not_found() throws Exception {
+        given(summaryService.summaryForNext(10)).willThrow(new NotFoundException(SUMMARY_NOT_FOUND));
+        mockMvc.perform(get("/weather/summary?years=10"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is(SUMMARY_NOT_FOUND)));
     }
 }

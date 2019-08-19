@@ -2,6 +2,7 @@ package com.nmkip.weather.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Summary {
@@ -72,5 +73,23 @@ public class Summary {
 
     public void setMostIntenseRainyDay(Integer mostIntenseRainyDay) {
         this.mostIntenseRainyDay = mostIntenseRainyDay;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Summary)) return false;
+        Summary summary = (Summary) o;
+        return Objects.equals(id, summary.id) &&
+                Objects.equals(optimalCount, summary.optimalCount) &&
+                Objects.equals(draughtCount, summary.draughtCount) &&
+                Objects.equals(rainyCount, summary.rainyCount) &&
+                Objects.equals(unknownCount, summary.unknownCount) &&
+                Objects.equals(mostIntenseRainyDay, summary.mostIntenseRainyDay);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, optimalCount, draughtCount, rainyCount, unknownCount, mostIntenseRainyDay);
     }
 }
