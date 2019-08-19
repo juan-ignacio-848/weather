@@ -4,7 +4,7 @@ import com.nmkip.weather.adapter.ForecastAdapter;
 import com.nmkip.weather.domain.Forecast;
 import com.nmkip.weather.exception.ForecastNotFoundException;
 import com.nmkip.weather.exception.WeatherControllerAdvice;
-import com.nmkip.weather.service.WeatherService;
+import com.nmkip.weather.service.ForecastService;
 import name.falgout.jeffrey.testing.junit.mockito.MockitoExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,24 +21,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class WeatherControllerAPITest {
+class ForecastControllerTest {
 
     @Mock
-    private WeatherService weatherService;
+    private ForecastService forecastService;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        WeatherController weatherController = new WeatherController(weatherService, new ForecastAdapter());
-        mockMvc = MockMvcBuilders.standaloneSetup(weatherController)
+        ForecastController forecastController = new ForecastController(forecastService, new ForecastAdapter());
+        mockMvc = MockMvcBuilders.standaloneSetup(forecastController)
                 .setControllerAdvice(new WeatherControllerAdvice())
                 .build();
     }
 
     @Test
-    void validate_status_ok_json_format() throws Exception {
-        given(weatherService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
+    void validate_status_ok_json_format_when_searching_for_a_specific_forecast() throws Exception {
+        given(forecastService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
         mockMvc.perform(get("/weather?day=1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.day", is(1)))
@@ -46,35 +46,34 @@ class WeatherControllerAPITest {
     }
 
     @Test
-    void validate_status_bad_request_when_day_is_less_than_1() throws Exception {
-        given(weatherService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
+    void when_searching_for_a_specific_forecast_and_day_is_less_than_1_then_status_is_bad_request() throws Exception {
+        given(forecastService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
         mockMvc.perform(get("/weather?day=0"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("First day is 1")));
     }
 
     @Test
-    void validate_status_bad_request_when_day_is_missing() throws Exception {
-        given(weatherService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
+    void when_searching_for_a_specific_forecast_and_day_is_missing_then_status_is_bad_request() throws Exception {
+        given(forecastService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
         mockMvc.perform(get("/weather"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("A day number is required")));
     }
 
     @Test
-    void validate_status_is_not_found_when_a_forecast_is_missing() throws Exception {
-        given(weatherService.forecastFor(23341)).willThrow(ForecastNotFoundException.class);
+    void when_searching_for_a_specific_forecast_and_it_does_not_exist_then_status_is_not_found() throws Exception {
+        given(forecastService.forecastFor(23341)).willThrow(ForecastNotFoundException.class);
         mockMvc.perform(get("/weather?day=23341"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("Forecast not found")));
     }
 
     @Test
-    void validate_status_is_internal_server_error_when_unexpected_exception_occurs() throws Exception {
-        given(weatherService.forecastFor(4)).willThrow(RuntimeException.class);
+    void when_searching_for_a_specific_forecast_and_an_unexpected_exception_occurs_then_status_is_internal_server_error() throws Exception {
+        given(forecastService.forecastFor(4)).willThrow(RuntimeException.class);
         mockMvc.perform(get("/weather?day=4"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message", is("Something went wrong")));
-
     }
 }

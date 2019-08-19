@@ -6,13 +6,13 @@ import com.nmkip.weather.repository.ForecastRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WeatherService {
+public class ForecastService {
 
     private static final int TOTAL_DAYS_FOR_FULL_CYCLE = 360;
 
     private final ForecastRepository repository;
 
-    public WeatherService(ForecastRepository repository) {
+    public ForecastService(ForecastRepository repository) {
         this.repository = repository;
     }
 

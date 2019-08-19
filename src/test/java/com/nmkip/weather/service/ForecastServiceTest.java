@@ -20,15 +20,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class WeatherServiceTest {
+class ForecastServiceTest {
 
     @Mock
     ForecastRepository forecastRepository;
-    private WeatherService service;
+    private ForecastService service;
 
     @BeforeEach
     void setUp() {
-        service = new WeatherService(forecastRepository);
+        service = new ForecastService(forecastRepository);
     }
 
     @ParameterizedTest
@@ -49,8 +49,6 @@ class WeatherServiceTest {
     void throw_an_exception_when_day_is_not_found() {
         given(forecastRepository.findById(32)).willReturn(Optional.empty());
 
-        Assertions.assertThrows(ForecastNotFoundException.class, () -> {
-            service.forecastFor(32);
-        });
+        Assertions.assertThrows(ForecastNotFoundException.class, () -> service.forecastFor(32));
     }
 }
