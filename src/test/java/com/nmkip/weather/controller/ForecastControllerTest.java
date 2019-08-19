@@ -47,18 +47,16 @@ class ForecastControllerTest {
 
     @Test
     void when_searching_for_a_specific_forecast_and_day_is_less_than_1_then_status_is_bad_request() throws Exception {
-        given(forecastService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
         mockMvc.perform(get("/weather?day=0"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message", is("First day is 1")));
+                .andExpect(jsonPath("$.message", is("Param 'day' must be greater or equal than 1")));
     }
 
     @Test
     void when_searching_for_a_specific_forecast_and_day_is_missing_then_status_is_bad_request() throws Exception {
-        given(forecastService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
         mockMvc.perform(get("/weather"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message", is("A day number is required")));
+                .andExpect(jsonPath("$.message", is("Param 'day' is required")));
     }
 
     @Test

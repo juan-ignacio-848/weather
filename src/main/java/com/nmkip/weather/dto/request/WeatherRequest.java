@@ -5,11 +5,11 @@ import javax.validation.constraints.NotNull;
 
 public class WeatherRequest {
 
-    @NotNull(message = "A day number is required")
-    @Min(value = 1, message = "First day is 1")
+    @NotNull(message = "Param 'day' is required")
+    @Min(value = 1, message = "Param 'day' must be greater or equal than 1")
     private Integer day;
 
-    public WeatherRequest(@Min(22) Integer day) {
+    public WeatherRequest(Integer day) {
         this.day = day;
     }
 
@@ -17,7 +17,4 @@ public class WeatherRequest {
         return day;
     }
 
-    public void setDay(Integer day) {
-        this.day = day;
-    }
 }
