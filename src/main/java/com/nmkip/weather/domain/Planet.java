@@ -2,12 +2,12 @@ package com.nmkip.weather.domain;
 
 import java.util.Objects;
 
-class Planet {
+public class Planet {
 
     private final int distance;
     private final int speed;
 
-    Planet(int distance, int speed) {
+    public Planet(int distance, int speed) {
         this.distance = distance;
         this.speed = speed;
     }

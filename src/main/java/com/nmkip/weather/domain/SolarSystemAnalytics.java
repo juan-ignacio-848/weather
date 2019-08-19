@@ -5,7 +5,7 @@ import java.util.List;
 import static com.nmkip.weather.domain.Alignment.*;
 import static java.lang.Math.pow;
 
-class SolarSystemAnalytics {
+public class SolarSystemAnalytics {
 
     private static final Coordinate SUN_COORDINATE = new Coordinate(0, 0);
 

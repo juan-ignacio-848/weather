@@ -2,7 +2,7 @@ package com.nmkip.weather.domain;
 
 import static com.nmkip.weather.domain.Weather.*;
 
-class WeatherForecaster {
+public class WeatherForecaster {
 
     Weather weatherBy(Alignment alignment) {
         switch (alignment) {

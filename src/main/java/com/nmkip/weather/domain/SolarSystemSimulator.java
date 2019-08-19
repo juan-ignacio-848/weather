@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class SolarSystemSimulator {
+public class SolarSystemSimulator {
 
     private final List<Planet> planets;
 
-    SolarSystemSimulator(List<Planet> planets) {
+    public SolarSystemSimulator(List<Planet> planets) {
         this.planets = planets;
     }
 

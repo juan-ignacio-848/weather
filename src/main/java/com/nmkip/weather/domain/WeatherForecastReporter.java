@@ -10,19 +10,19 @@ import java.util.stream.Collectors;
 import static com.nmkip.weather.domain.Weather.RAINY;
 import static java.util.Comparator.comparing;
 
-class WeatherForecastReporter {
+public class WeatherForecastReporter {
 
     private final SolarSystemSimulator simulator;
     private final SolarSystemAnalytics analytics;
     private final WeatherForecaster weatherForecaster;
 
-    WeatherForecastReporter(SolarSystemSimulator solarSystemSimulator, SolarSystemAnalytics analytics, WeatherForecaster weatherForecaster) {
+    public WeatherForecastReporter(SolarSystemSimulator solarSystemSimulator, SolarSystemAnalytics analytics, WeatherForecaster weatherForecaster) {
         this.simulator = solarSystemSimulator;
         this.analytics = analytics;
         this.weatherForecaster = weatherForecaster;
     }
 
-    WeatherForecastReport reportForFollowing(int days) {
+    public WeatherForecastReport reportForFollowing(int days) {
         final Map<SolarSystemState, Weather> weatherByState = weatherByState(simulator.simulate(days));
         return new WeatherForecastReport(forecastsFor(weatherByState),
                 weatherCount(weatherByState.values()),

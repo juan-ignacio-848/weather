@@ -7,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class WeatherForecastReport {
+public class WeatherForecastReport {
 
     private final List<Forecast> forecasts;
     private final Map<Weather, Long> weatherCount = initWeatherCount();
@@ -24,6 +24,18 @@ class WeatherForecastReport {
         return Stream.of(Weather.values())
                 .collect(Collectors.toMap(Function.identity(), w -> 0L));
 
+    }
+
+    public List<Forecast> forecasts() {
+        return forecasts;
+    }
+
+    public Map<Weather, Long> weatherCount() {
+        return weatherCount;
+    }
+
+    public Integer mostIntenseRainyDay() {
+        return mostIntenseRainyDay;
     }
 
     @Override
