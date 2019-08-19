@@ -1,5 +1,8 @@
 package com.nmkip.weather.domain;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 class Triangle {
 
     private Coordinate c1;
@@ -16,15 +19,39 @@ class Triangle {
         return new Triangle(c1, c2, c3);
     }
 
-    Boolean contains(Coordinate P) {
-        return inTheBorders(P) || isInside(P);
+    Boolean contains(Coordinate p) {
+        return inTheBorders(p) || isInside(p);
     }
 
-    private boolean inTheBorders(Coordinate P) {
-        return LinearFunction.from(c1, c2).contains(P) ||
-                LinearFunction.from(c1, c3).contains(P) ||
-                LinearFunction.from(c2, c3).contains(P);
+    private boolean inTheBorders(Coordinate p) {
+        return withinBounds(p) &&
+                (LinearFunction.from(c1, c2).contains(p) ||
+                 LinearFunction.from(c1, c3).contains(p) ||
+                 LinearFunction.from(c2, c3).contains(p));
 
+    }
+
+    private boolean withinBounds(Coordinate p) {
+        return min_X() <= p.X() &&
+               p.X() <= max_X() &&
+               min_Y() <= p.Y() &&
+               p.Y() <= max_Y();
+    }
+
+    private double max_X() {
+        return max(max(c1.X(), c2.X()), c3.X());
+    }
+
+    private double max_Y() {
+        return max(max(c1.Y(), c2.Y()), c3.Y());
+    }
+
+    private double min_X() {
+        return min(min(c1.X(), c2.X()), c3.X());
+    }
+
+    private double min_Y() {
+        return min(min(c1.Y(), c2.Y()), c3.Y());
     }
 
     /**

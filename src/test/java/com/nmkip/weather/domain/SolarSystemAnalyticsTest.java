@@ -28,6 +28,7 @@ class SolarSystemAnalyticsTest {
             "-1,-2, 3,2, -1,2, TRIANGLE_CONTAINING_SUN",
             "-2,3, 10,-4, 0,0, TRIANGLE_CONTAINING_SUN",
             "10,10, -10,-10, -20,20, TRIANGLE_CONTAINING_SUN",
+            "-5,5, -2,2, 2,8, TRIANGLE",
             "-2,3, 10,-4, 15,5, TRIANGLE",
             "-15,0, -2,3, -20,10, TRIANGLE",
     })
