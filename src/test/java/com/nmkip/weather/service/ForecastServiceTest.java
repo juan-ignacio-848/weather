@@ -23,12 +23,12 @@ import static org.mockito.BDDMockito.given;
 class ForecastServiceTest {
 
     @Mock
-    ForecastRepository forecastRepository;
+    ForecastRepository repository;
     private ForecastService service;
 
     @BeforeEach
     void setUp() {
-        service = new ForecastService(forecastRepository);
+        service = new ForecastService(repository);
     }
 
     @ParameterizedTest
@@ -40,14 +40,14 @@ class ForecastServiceTest {
 
     })
     void search_for_forecast_by_day(Integer day, Integer equivalentDay) {
-        given(forecastRepository.findById(equivalentDay)).willReturn(Optional.of(new Forecast(equivalentDay, DRAUGHT)));
+        given(repository.findById(equivalentDay)).willReturn(Optional.of(new Forecast(equivalentDay, DRAUGHT)));
 
         assertThat(service.forecastFor(day), is(new Forecast(day, DRAUGHT)));
     }
 
     @Test
     void throw_an_exception_when_day_is_not_found() {
-        given(forecastRepository.findById(32)).willReturn(Optional.empty());
+        given(repository.findById(32)).willReturn(Optional.empty());
 
         Assertions.assertThrows(NotFoundException.class, () -> service.forecastFor(32));
     }

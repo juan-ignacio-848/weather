@@ -25,13 +25,13 @@ class SummaryControllerTest {
     private static final String SUMMARY_NOT_FOUND = "Summary not found";
 
     @Mock
-    private SummaryService summaryService;
+    private SummaryService service;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        SummaryController forecastController = new SummaryController(summaryService, new SummaryAdapter());
+        SummaryController forecastController = new SummaryController(service, new SummaryAdapter());
         mockMvc = MockMvcBuilders.standaloneSetup(forecastController)
                 .setControllerAdvice(new WeatherControllerAdvice())
                 .build();
@@ -39,7 +39,7 @@ class SummaryControllerTest {
 
     @Test
     void validate_status_ok_json_format_when_searching_for_a_specific_forecast() throws Exception {
-        given(summaryService.summaryForNext(10)).willReturn(new Summary(1L, 20L, 5L, 3L, 3000L, 6));
+        given(service.summaryForNext(10)).willReturn(new Summary(1L, 20L, 5L, 3L, 3000L, 6));
         mockMvc.perform(get("/weather/summary?years=10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.optimal_count", is(20)))
@@ -65,7 +65,7 @@ class SummaryControllerTest {
 
     @Test
     void when_searching_for_a_summary_and_it_does_not_exist_then_status_is_not_found() throws Exception {
-        given(summaryService.summaryForNext(10)).willThrow(new NotFoundException(SUMMARY_NOT_FOUND));
+        given(service.summaryForNext(10)).willThrow(new NotFoundException(SUMMARY_NOT_FOUND));
         mockMvc.perform(get("/weather/summary?years=10"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is(SUMMARY_NOT_FOUND)));

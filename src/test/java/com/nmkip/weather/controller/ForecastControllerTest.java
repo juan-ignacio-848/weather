@@ -26,13 +26,13 @@ class ForecastControllerTest {
     private static final String FORECAST_NOT_FOUND = "Forecast not found";
 
     @Mock
-    private ForecastService forecastService;
+    private ForecastService service;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        ForecastController forecastController = new ForecastController(forecastService, new ForecastAdapter());
+        ForecastController forecastController = new ForecastController(service, new ForecastAdapter());
         mockMvc = MockMvcBuilders.standaloneSetup(forecastController)
                 .setControllerAdvice(new WeatherControllerAdvice())
                 .build();
@@ -40,7 +40,7 @@ class ForecastControllerTest {
 
     @Test
     void validate_status_ok_json_format_when_searching_for_a_specific_forecast() throws Exception {
-        given(forecastService.forecastFor(1)).willReturn(new Forecast(1, RAINY));
+        given(service.forecastFor(1)).willReturn(new Forecast(1, RAINY));
         mockMvc.perform(get("/weather?day=1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.day", is(1)))
@@ -63,7 +63,7 @@ class ForecastControllerTest {
 
     @Test
     void when_searching_for_a_specific_forecast_and_it_does_not_exist_then_status_is_not_found() throws Exception {
-        given(forecastService.forecastFor(23341)).willThrow(new NotFoundException(FORECAST_NOT_FOUND));
+        given(service.forecastFor(23341)).willThrow(new NotFoundException(FORECAST_NOT_FOUND));
         mockMvc.perform(get("/weather?day=23341"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is(FORECAST_NOT_FOUND)));
@@ -71,7 +71,7 @@ class ForecastControllerTest {
 
     @Test
     void when_searching_for_a_specific_forecast_and_an_unexpected_exception_occurs_then_status_is_internal_server_error() throws Exception {
-        given(forecastService.forecastFor(4)).willThrow(RuntimeException.class);
+        given(service.forecastFor(4)).willThrow(RuntimeException.class);
         mockMvc.perform(get("/weather?day=4"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message", is("Something went wrong")));

@@ -12,16 +12,16 @@ import javax.validation.Valid;
 @RestController
 public class ForecastController {
 
-    private final ForecastService forecastService;
-    private final ForecastAdapter forecastAdapter;
+    private final ForecastService service;
+    private final ForecastAdapter adapter;
 
-    public ForecastController(ForecastService forecastService, ForecastAdapter forecastAdapter) {
-        this.forecastService = forecastService;
-        this.forecastAdapter = forecastAdapter;
+    public ForecastController(ForecastService service, ForecastAdapter adapter) {
+        this.service = service;
+        this.adapter = adapter;
     }
 
     @GetMapping("/weather")
     public ForecastResponse forecastFor(@Valid WeatherRequest request) {
-        return forecastAdapter.toDto(forecastService.forecastFor(request.getDay()));
+        return adapter.toDto(service.forecastFor(request.getDay()));
     }
 }
