@@ -24,6 +24,7 @@ class ForecastServiceTest {
 
     @Mock
     ForecastRepository repository;
+
     private ForecastService service;
 
     @BeforeEach
@@ -51,4 +52,5 @@ class ForecastServiceTest {
 
         Assertions.assertThrows(NotFoundException.class, () -> service.forecastFor(32));
     }
+
 }

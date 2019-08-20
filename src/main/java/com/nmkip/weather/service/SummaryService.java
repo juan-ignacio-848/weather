@@ -3,6 +3,7 @@ package com.nmkip.weather.service;
 import com.nmkip.weather.domain.Summary;
 import com.nmkip.weather.exception.NotFoundException;
 import com.nmkip.weather.repository.SummaryRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +18,7 @@ public class SummaryService {
         this.repository = repository;
     }
 
+    @Cacheable("summary")
     public Summary summaryForNext(Integer years) {
         return repository.findById(SUMMARY_ID)
                 .map(summary -> new Summary(summary.getId(),

@@ -3,6 +3,7 @@ package com.nmkip.weather.service;
 import com.nmkip.weather.domain.Forecast;
 import com.nmkip.weather.exception.NotFoundException;
 import com.nmkip.weather.repository.ForecastRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,7 @@ public class ForecastService {
         this.repository = repository;
     }
 
+    @Cacheable("forecast")
     public Forecast forecastFor(int day) {
         return repository.findById(equivalent(day))
                 .map(forecast -> new Forecast(day, forecast.getWeather()))
